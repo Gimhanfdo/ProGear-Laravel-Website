@@ -19,17 +19,25 @@ RUN a2enmod rewrite
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy Laravel project
+# Copy composer binary from composer image (better than curl)
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Copy all project files
 COPY . .
 
-# Fix permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage \
-    && chmod -R 775 /var/www/html/bootstrap/cache
+# Install dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
-# Install Composer dependencies
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
-    && composer install --optimize-autoloader --no-interaction
+# Fix permissions for Laravel
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-EXPOSE 80
+# Update Apache config to serve /public
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
+    && sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/apache2.conf
+
+# Expose Railway’s expected port
+EXPOSE 8080
+
+# Run Apache
 CMD ["apache2-foreground"]
