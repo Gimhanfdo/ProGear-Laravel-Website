@@ -1,7 +1,7 @@
-# Use official PHP 8.2 with Apache
+# 1️⃣ Use PHP 8.2 with Apache
 FROM php:8.2-apache
 
-# Install system dependencies and PHP extensions
+# 2️⃣ Install system dependencies + PHP extensions
 RUN apt-get update && apt-get install -y \
     libssl-dev \
     pkg-config \
@@ -14,23 +14,23 @@ RUN apt-get update && apt-get install -y \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb
 
-# Enable Apache rewrite
+# 3️⃣ Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Install Composer
+# 4️⃣ Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Set working directory
+# 5️⃣ Set working directory
 WORKDIR /var/www/html
 
-# Copy Laravel project files
+# 6️⃣ Copy project files
 COPY . .
 
-# Install dependencies
+# 7️⃣ Install PHP dependencies
 RUN composer install --optimize-autoloader --no-interaction
 
-# Expose Apache port
+# 8️⃣ Expose Apache port
 EXPOSE 80
 
-# Start Apache
+# 9️⃣ Start Apache
 CMD ["apache2-foreground"]
