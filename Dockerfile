@@ -1,9 +1,11 @@
-# Base image
+# -------------------------------
+# Base PHP + Apache image
+# -------------------------------
 FROM php:8.2-apache
 
-# -----------------------------
+# -------------------------------
 # Install system dependencies
-# -----------------------------
+# -------------------------------
 RUN apt-get update && apt-get install -y \
         libssl-dev \
         pkg-config \
@@ -12,59 +14,68 @@ RUN apt-get update && apt-get install -y \
         libonig-dev \
         unzip \
         git \
+        curl \
+        zip \
+        supervisor \
+        libzip-dev \
         nodejs \
         npm \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb \
-    && docker-php-ext-install pdo_mysql
+    && docker-php-ext-install pdo_mysql zip
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# -----------------------------
+# -------------------------------
 # Set working directory
-# -----------------------------
+# -------------------------------
 WORKDIR /var/www/html
 
-# -----------------------------
-# Copy composer binary from official image
-# -----------------------------
+# -------------------------------
+# Copy composer binary from composer image
+# -------------------------------
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# -----------------------------
+# -------------------------------
+# Copy package files & install frontend dependencies
+# -------------------------------
+COPY package*.json ./
+RUN npm install
+
+# -------------------------------
 # Copy all project files
-# -----------------------------
+# -------------------------------
 COPY . .
 
-# -----------------------------
-# Install PHP dependencies
-# -----------------------------
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
-
-# -----------------------------
-# Install Node dependencies & build assets
-# -----------------------------
-RUN npm install
+# -------------------------------
+# Build frontend assets for production
+# -------------------------------
 RUN npm run build
 
-# -----------------------------
-# Fix permissions
-# -----------------------------
+# -------------------------------
+# Install PHP dependencies
+# -------------------------------
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+
+# -------------------------------
+# Fix permissions for Laravel
+# -------------------------------
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# -----------------------------
-# Update Apache to serve from /public
-# -----------------------------
+# -------------------------------
+# Update Apache config to serve /public
+# -------------------------------
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
     && sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/apache2.conf
 
-# -----------------------------
-# Expose port for Render/Railway
-# -----------------------------
+# -------------------------------
+# Expose port 8080 for Render/Railway
+# -------------------------------
 EXPOSE 8080
 
-# -----------------------------
-# Start Apache in foreground
-# -----------------------------
+# -------------------------------
+# Run Apache in foreground
+# -------------------------------
 CMD ["apache2-foreground"]
