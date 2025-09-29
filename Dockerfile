@@ -16,7 +16,6 @@ RUN apt-get update && apt-get install -y \
         git \
         curl \
         zip \
-        supervisor \
         libzip-dev \
         nodejs \
         npm \
@@ -38,15 +37,14 @@ WORKDIR /var/www/html
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # -------------------------------
-# Copy package files & install frontend dependencies
-# -------------------------------
-COPY package*.json ./
-RUN npm install
-
-# -------------------------------
 # Copy all project files
 # -------------------------------
 COPY . .
+
+# -------------------------------
+# Install Node.js dependencies
+# -------------------------------
+RUN npm install
 
 # -------------------------------
 # Build frontend assets for production
@@ -71,7 +69,7 @@ RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available
     && sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/apache2.conf
 
 # -------------------------------
-# Expose port 8080 for Render/Railway
+# Expose port 8080 for Render
 # -------------------------------
 EXPOSE 8080
 
