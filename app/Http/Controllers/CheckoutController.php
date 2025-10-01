@@ -12,6 +12,7 @@ use App\Models\Cart;
 use App\Models\Product;
 use App\Models\MongoOrder;
 use App\Models\MongoOrderItem;
+use App\Events\OrderPlaced;
 
 class CheckoutController extends Controller
 {
@@ -143,6 +144,9 @@ class CheckoutController extends Controller
                     'total' => $order->total,
                 ]);
             }
+
+            // After creating the order
+            OrderPlaced::dispatch($order);
 
             return redirect()->route('confirmation')->with('success', 'Order placed successfully!');
 
