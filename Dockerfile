@@ -71,7 +71,7 @@ RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available
 # -------------------------------
 # Expose port 8080 for Render
 # -------------------------------
-EXPOSE 8080
+EXPOSE 80
 
 # -------------------------------
 # Run Apache in foreground
