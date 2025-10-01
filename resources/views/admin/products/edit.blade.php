@@ -1,63 +1,99 @@
 <x-admin-layout>
-    <div class="max-w-3xl mx-auto py-8">
-        <h1 class="text-2xl font-bold mb-6">Edit Product</h1>
+    <div class="max-w-3xl mx-auto py-10">
+        <div class="bg-white shadow rounded-lg p-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-8 border-b pb-4">Edit Product</h1>
 
-        @if ($errors->any())
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        @endif
+            {{-- Error Messages --}}
+            @if ($errors->any())
+                <div class="mb-6 p-4 rounded-md bg-red-50 border border-red-200">
+                    <ul class="list-disc list-inside text-red-600 text-sm">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-        <form action="{{ route('admin.products.update', $product->id) }}" method="POST" class="space-y-6">
-            @csrf
-            @method('PUT')
+            <form action="{{ route('admin.products.update', $product->id) }}" method="POST" class="space-y-6">
+                @csrf
+                @method('PUT')
 
-            <div>
-                <label class="block text-sm font-medium">Name</label>
-                <input type="text" name="name" value="{{ $product->name }}" class="w-full border rounded p-2" required>
-            </div>
+                {{-- Name --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Name</label>
+                    <input type="text" name="name" value="{{ $product->name }}"
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500 p-3"
+                        required>
+                </div>
 
-            <div>
-                <label class="block text-sm font-medium">Brand</label>
-                <input type="text" name="brand" value="{{ $product->brand }}" class="w-full border rounded p-2" required>
-            </div>
+                {{-- Brand --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Brand</label>
+                    <input type="text" name="brand" value="{{ $product->brand }}"
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500 p-3"
+                        required>
+                </div>
 
-            <div>
-                <label class="block text-sm font-medium">Category</label>
-                <input type="text" name="category" value="{{ $product->category }}" class="w-full border rounded p-2" required>
-            </div>
+                {{-- Category (Dropdown) --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Category</label>
+                    <select name="category"
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500 p-3"
+                        required>
+                        <option value="Bat" {{ $product->category == 'Bat' ? 'selected' : '' }}>Bat</option>
+                        <option value="Ball" {{ $product->category == 'Ball' ? 'selected' : '' }}>Ball</option>
+                        <option value="Helmet" {{ $product->category == 'Helmet' ? 'selected' : '' }}>Helmet</option>
+                        <option value="Other" {{ $product->category == 'Other' ? 'selected' : '' }}>Other</option>
+                    </select>
+                </div>
 
-            <div>
-                <label class="block text-sm font-medium">Price</label>
-                <input type="number" step="0.01" name="price" value="{{ $product->price }}" class="w-full border rounded p-2" required>
-            </div>
+                {{-- Price --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Price</label>
+                    <input type="number" step="0.01" name="price" value="{{ $product->price }}"
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500 p-3"
+                        required>
+                </div>
 
-            <div>
-                <label class="block text-sm font-medium">Product Image</label>
-                <input type="text" name="productimage" value="{{ $product->productimage }}" class="w-full border rounded p-2" required>
-            </div>
+                {{-- Product Image --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Product Image (URL)</label>
+                    <input type="text" name="productimage" value="{{ $product->productimage }}"
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500 p-3"
+                        required>
+                </div>
 
-            <div>
-                <label class="block text-sm font-medium">Description</label>
-                <input type="text" name="description" value="{{ $product->description }}" class="w-full border rounded p-2" required>
-            </div>
+                {{-- Description --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Description</label>
+                    <textarea name="description" rows="4"
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500 p-3"
+                        required>{{ $product->description }}</textarea>
+                </div>
 
-            <div>
-                <label class="block text-sm font-medium">Discount (%)</label>
-                <input type="number" name="discountpercentage" value="{{ $product->discountpercentage }}" class="w-full border rounded p-2">
-            </div>
+                {{-- Discount --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Discount (%)</label>
+                    <input type="number" name="discountpercentage" value="{{ $product->discountpercentage }}"
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500 p-3">
+                </div>
 
-            <div>
-                <label class="block text-sm font-medium">Quantity Available</label>
-                <input type="number" name="quantityavailable" value="{{ $product->quantityavailable }}" class="w-full border rounded p-2" required>
-            </div>
+                {{-- Quantity --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Quantity Available</label>
+                    <input type="number" name="quantityavailable" value="{{ $product->quantityavailable }}"
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500 p-3"
+                        required>
+                </div>
 
-            <button type="submit" 
-                    class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
-                Update
-            </button>
-        </form>
+                {{-- Submit Button --}}
+                <div class="pt-4">
+                    <button type="submit"
+                        class="w-full sm:w-auto px-6 py-3 bg-teal-600 text-white font-semibold rounded-lg shadow-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                        Update Product
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </x-admin-layout>
