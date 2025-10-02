@@ -34,17 +34,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
         return redirect()->route('dashboard'); // user dashboard
     });
+});
 
+//User Routes
+Route::middleware(['auth:sanctum','user', 'verified'])->group(function () {
     // User dashboard 
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
-    // Admin dashboard 
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
-    
 
     //Product pages
     Route::prefix('products')->group(function () {
