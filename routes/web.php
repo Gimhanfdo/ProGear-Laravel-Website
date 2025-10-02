@@ -100,10 +100,10 @@ Route::middleware(['auth:sanctum', 'admin', 'verified'])->group(function () {
     Route::post('/admin/admins', [AdminController::class, 'store'])->name('admin.admins.store');
     Route::get('/admin/admins/{id}/edit', [AdminController::class, 'edit'])->name('admin.admins.edit');
     Route::put('/admin/admins/{id}', [AdminController::class, 'update'])->name('admin.admins.update');
-    Route::delete('/admin/admins/{id}', [AdminController::class, 'destroy'])->name('admin.admins.destroy');
+    Route::delete('/admin/admins/{id}', [AdminController::class, 'destroyAdmin'])->name('admin.admins.destroy');
 
     // Delete Users
-    Route::delete('/admin/users/{id}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
+    Route::delete('/admin/users/{id}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
 });
 
 // Include auth.php for Breeze routes (login/register, password, email verification)
