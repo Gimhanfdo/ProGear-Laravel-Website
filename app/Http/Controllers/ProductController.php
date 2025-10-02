@@ -70,7 +70,7 @@ class ProductController extends Controller
     // Get products by category
     public function getProductsByCategory($category)
     {
-        return Product::where('category', strtolower($category))->get();
+        return Product::byCategory($category)->get();
     }
 
     // Get single product by ID
@@ -82,7 +82,7 @@ class ProductController extends Controller
     // Get discounted products
     public function getDiscountedProducts()
     {
-        return Product::where('discountpercentage', '>', 0)->get();
+        return Product::discounted()->get();
     }
 
 
