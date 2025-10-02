@@ -20,12 +20,17 @@
 
             <div>
                 <label class="block text-sm font-medium">Email</label>
-                <input type="text" name="email" class="w-full border rounded p-2" required>
+                <input type="email" name="email" class="w-full border rounded p-2" required>
             </div>
 
             <div>
                 <label class="block text-sm font-medium">Password</label>
                 <input type="password" name="password" class="w-full border rounded p-2" required>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium">Confirm Password</label>
+                <input type="password" name="password_confirmation" class="w-full border rounded p-2" required>
             </div>
 
             <button type="submit" 

@@ -35,14 +35,7 @@
                                 <span class="text-gray-900 font-bold">LKR</span> {{ number_format($product->price, 2) }}</span>
                             @endif
                         </div>
-
-                        <!-- <button wire:click="addToCart({{ $product->id }})"
-                            class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
-                            Add
-                        </button> -->
                     </div>
-
-                    <!-- <p class="text-gray-600 text-sm mt-3">{{ $product->description }}</p> -->
                 </div>
             </div>
         @empty

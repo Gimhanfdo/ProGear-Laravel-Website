@@ -26,7 +26,7 @@
                             <td class="p-4 text-gray-700 font-medium">{{ $user->id }}</td>
                             <td class="p-4 text-gray-900">{{ $user->name }}</td>
                             <td class="p-4 text-gray-600">{{ $user->email }}</td>
-                            <td class="p-4 text-gray-600">{{ $user->password }}</td>
+                            <td class="p-4 text-gray-600">Hashed Password</td>
                             <td class="p-4 flex gap-3">
                                 <!-- Delete Button -->
                                 <form action="{{ route('admin.users.destroy', $user->id) }}" 

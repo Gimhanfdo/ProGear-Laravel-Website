@@ -1,6 +1,6 @@
 <x-admin-layout>
     <div class="max-w-3xl mx-auto py-8">
-        <h1 class="text-2xl font-bold mb-6">Edit Product</h1>
+        <h1 class="text-2xl font-bold mb-6">Edit Admin</h1>
 
         @if ($errors->any())
             <ul>
@@ -26,7 +26,12 @@
 
             <div>
                 <label class="block text-sm font-medium">Password</label>
-                <input type="password" name="password" value="{{ $admin->password }}" class="w-full border rounded p-2" required>
+                <input type="password" name="password" value="" class="w-full border rounded p-2">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium">Confirm Password</label>
+                <input type="password" name="password_confirmation" class="w-full border rounded p-2">
             </div>
 
             <button type="submit" 
