@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
 use App\Models\User;
 
 class AdminController extends Controller
@@ -21,12 +22,12 @@ class AdminController extends Controller
         ]);
 
         User::create([
-        'name' => $validated['name'],
-        'email' => $validated['email'],
-        'password' => Hash::make($validated['password']),
-        'role' => 'admin',
-        'email_verified_at' => now(), 
-    ]);
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role' => 'admin',
+            'email_verified_at' => now(),
+        ]);
 
         return redirect()->route('admin.admins.index')->with('success', 'Admin created successfully.');
     }
@@ -36,21 +37,35 @@ class AdminController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:users,email',
-            'password' => ['required', 'confirmed', Password::defaults()],
+            'email' => [
+                'required',
+                'string',
+                'lowercase',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($id),
+            ],
+            'password' => ['nullable', 'confirmed', Password::defaults()],
         ]);
 
         $admin = $this->getUserById($id);
-        $admin->update([
-        'name' => $validated['name'],
-        'email' => $validated['email'],
-        'password' => Hash::make($validated['password']),
-        'role' => 'admin',
-        'email_verified_at' => now(), 
-    ]);
+
+        $updateData = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'role' => 'admin',
+            'email_verified_at' => now(),
+        ];
+
+        if (!empty($validated['password'])) {
+            $updateData['password'] = Hash::make($validated['password']);
+        }
+
+        $admin->update($updateData);
 
         return redirect()->route('admin.admins.index')->with('success', 'Admin updated successfully.');
     }
+
 
     // Get all users
     public function getAllUsers()
@@ -100,7 +115,7 @@ class AdminController extends Controller
     public function users()
     {
         $users = $this->getUsersByRole('user');
-        
+
         return view('admin.users.index', compact('users'));
     }
 
@@ -109,6 +124,12 @@ class AdminController extends Controller
     {
         $admins = $this->getUsersByRole('admin');
         return view('admin.admins.index', compact('admins'));
+    }
+
+    //Create admin page
+    public function create()
+    {
+        return view('admin.admins.create');
     }
 
     // Show edit admin page
