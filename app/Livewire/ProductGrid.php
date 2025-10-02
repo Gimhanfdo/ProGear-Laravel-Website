@@ -10,11 +10,10 @@ class ProductGrid extends Component
 {
     use WithPagination;
 
-    public $category = null;          // set from Blade: :category="$category"
-    public $discountedOnly = false;   // set from Blade: :discounted-only="true"
-    public $perPage = 12;
+    public $category = null;          
+    public $discountedOnly = false;  
+    public $perPage = 8;
 
-    // Keep filter state in the URL (optional)
     protected $queryString = [
         'category' => ['except' => null],
         'discountedOnly' => ['except' => false],
@@ -25,7 +24,6 @@ class ProductGrid extends Component
     public function mount($category = null, $discountedOnly = false)
     {
         $this->category = $category;
-        // convert string "true" / bool to boolean robustly
         $this->discountedOnly = filter_var($discountedOnly, FILTER_VALIDATE_BOOLEAN);
     }
 
