@@ -60,9 +60,9 @@ class CheckoutController extends Controller
         $request->validate([
             'shippingaddress' => 'required|string|max:255',
             'paymentmethod' => 'required|in:cash,card',
-            'cardnumber' => 'required_if:paymentmethod,card|digits:16',
-            'cvv' => 'required_if:paymentmethod,card|digits:3',
-            'expirydate' => 'required_if:paymentmethod,card',
+            'cardnumber' => 'nullable|required_if:paymentmethod,card|digits:16',
+            'cvv' => 'nullable|required_if:paymentmethod,card|digits:3',
+            'expirydate' => 'nullable|required_if:paymentmethod,card',
         ]);
 
         $user = Auth::user();
