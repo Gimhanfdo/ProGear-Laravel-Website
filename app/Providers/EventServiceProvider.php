@@ -15,6 +15,10 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\OrderPlaced::class => [
             \App\Listeners\LogNewOrder::class,
         ],
+
+        \Illuminate\Auth\Events\Failed::class => [
+            \App\Listeners\LogFailedLogin::class,
+        ],
     ];
 
     /**
