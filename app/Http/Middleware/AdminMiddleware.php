@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Log;
 
 class AdminMiddleware
 {
@@ -19,6 +20,14 @@ class AdminMiddleware
             return $next($request);
         }
 
-        abort(403, 'Unauthorized'); // block non-admins
+        Log::warning('Unauthorized access attempt', [
+            'user_id' => auth()->id(),
+            'ip' => $request->ip(),
+            'url' => $request->fullUrl(),
+            'method' => $request->method(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
+        abort(403, 'Unauthorized'); // block non-admins and log unauthorized access attempts
     }
 }
