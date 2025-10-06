@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 
@@ -51,6 +52,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/products/discounted', [ProductController::class, 'getDiscountedProducts']);
     Route::get('/products/category/{category}', [ProductController::class, 'getProductsByCategory']);
     Route::get('/products/{id}', [ProductController::class, 'getProductById']); // single product
+
+    //Review functionaliity
+    Route::get('/reviews/{productid}', [ReviewController::class, 'mobileindex']);
+    Route::post('/reviews/{productid}', [ReviewController::class, 'mobilestore']);
 
     // Cart
     Route::get('/cart', [CartController::class, 'index']);
